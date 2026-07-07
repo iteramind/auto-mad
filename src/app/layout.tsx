@@ -54,6 +54,14 @@ export default function RootLayout({
               Centro para el Fortalecimiento de la Sociedad Civil
             </p>
             <p className="mt-1">Fortalecemos capacidades. Acompañamos personas.</p>
+            <p className="mt-2">
+              <a
+                href="mailto:contacto@fortalecimiento.org"
+                className="font-medium text-brand-600 hover:text-brand-800 hover:underline"
+              >
+                Contacto
+              </a>
+            </p>
           </div>
         </footer>
       </body>
