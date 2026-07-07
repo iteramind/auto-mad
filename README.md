@@ -1,32 +1,27 @@
-# Autodiagnóstico de Fortalecimiento Institucional (SESFI)
+# Autodiagnóstico de Fortalecimiento Institucional
 
-Herramienta web auto‑hospedada para que **organizaciones de la sociedad civil (OSC)**
-autodiagnostiquen su **madurez institucional** y reciban la recomendación del
-**programa** al que conviene sumarse.
+Herramienta web para que **organizaciones de la sociedad civil (OSC)** autodiagnostiquen su
+**madurez institucional** y reciban la recomendación del **programa** al que conviene sumarse.
+Desarrollada para el **Centro para el Fortalecimiento de la Sociedad Civil (CFOSC)** en el marco
+del programa *Fortalece FEC Coahuila*.
 
-- Cuestionario de **10 preguntas** en **5 bloques** (sin usuario ni contraseña para el respondiente).
-- **Reporte** con nivel de madurez, **gráfica de araña** y **tabla** de porcentajes por área, y **programa recomendado** con botón para **sumarse**.
-- **Panel administrativo** (con login) para consultar y **exportar a CSV** todos los diagnósticos.
+- 🌐 **Producción:** https://fec.fortalecimiento.org · **Repo:** `iteramind/auto-mad`
+- 📝 Cuestionario de **10 preguntas** en **5 bloques** (el respondiente NO necesita cuenta).
+- 📊 **Reporte** con nivel de madurez, **gráfica de araña**, tabla de % por área y **programa recomendado** con botón para inscribirse.
+- 🔐 **Panel admin** (con login) para consultar diagnósticos y **exportar a CSV**.
 
 ## Stack
 
-Next.js 15 (App Router, TypeScript) · PostgreSQL + Prisma · Tailwind CSS · Recharts · iron-session.
+Next.js 15 (App Router, TS) · PostgreSQL + Prisma · Tailwind CSS v4 · Recharts · iron-session ·
+desplegado en **Railway** (build por Dockerfile, Postgres gestionado).
 
-## Estructura
+## Cómo funciona
 
-| Área | Archivo |
-|---|---|
-| Contenido del cuestionario | `src/lib/questionnaire.ts` |
-| Motor de puntaje (+ tests) | `src/lib/scoring.ts`, `src/lib/scoring.test.ts` |
-| Formulario del respondiente | `src/components/DiagnosticForm.tsx`, `src/app/page.tsx` |
-| Reporte + araña + CTA | `src/app/reporte/[id]/page.tsx` |
-| API | `src/app/api/**` |
-| Panel admin | `src/app/admin/**` |
-| Modelo de datos | `prisma/schema.prisma` |
+**Flujo del respondiente** (`/`): captura datos de la organización (nombre, años, donataria, puesto),
+responde 10 preguntas y obtiene un reporte en `/reporte/[id]`. El puntaje se calcula **en el servidor**.
 
-### Lógica de puntaje
-
-Cada respuesta vale 1–4 puntos (**menor puntaje = mayor madurez**). El total (10–40) determina el nivel:
+**Puntaje** (`src/lib/scoring.ts`): cada respuesta vale 1–4 puntos, **menor total = mayor madurez**.
+El total (10–40) determina el nivel/programa; el % por bloque de la araña es `(4 − promedio) / 3 × 100`.
 
 | Puntaje | Nivel / Programa recomendado |
 |---|---|
@@ -35,46 +30,55 @@ Cada respuesta vale 1–4 puntos (**menor puntaje = mayor madurez**). El total (
 | 25–34 | Construcción y consolidación de capacidades |
 | 35–40 | Organización emergente |
 
-Porcentaje de madurez por bloque (araña): `(4 − promedio) / 3 × 100`.
-Los rangos y textos son editables en `src/lib/scoring.ts`.
+Rangos, textos y programas son editables en `src/lib/scoring.ts`; las preguntas en
+`src/lib/questionnaire.ts` (transcritas del cuestionario SESFI).
+
+## Estructura
+
+| Área | Archivo(s) |
+|---|---|
+| Cuestionario (contenido) | `src/lib/questionnaire.ts` |
+| Motor de puntaje + tests | `src/lib/scoring.ts`, `src/lib/scoring.test.ts` |
+| Formulario del respondiente | `src/components/DiagnosticForm.tsx`, `src/app/page.tsx` |
+| Reporte (araña + tabla + CTA) | `src/app/reporte/[id]/page.tsx`, `src/components/RadarChartClient.tsx` |
+| Panel admin | `src/app/admin/**`, `src/lib/auth.ts`, `src/lib/admins.ts` |
+| API | `src/app/api/**` |
+| Modelo de datos | `prisma/schema.prisma` (modelo `Submission`) |
+| Marca CFOSC | `src/app/layout.tsx`, `public/brand/*.svg` |
 
 ## Desarrollo local
 
-Requisitos: Node 20+ y un PostgreSQL accesible.
+Requisitos: Node 20+ y PostgreSQL (o `docker compose up -d` para levantar la base en `localhost:5432`).
 
 ```bash
 npm install
-cp .env.example .env          # completa las variables (ver abajo)
-npx prisma migrate dev        # crea el esquema en tu base de datos
-npm run dev                   # http://localhost:3000
-npm test                      # tests del motor de puntaje
+cp .env.example .env        # completa las variables
+npx prisma migrate dev      # crea el esquema
+npm run dev                 # http://localhost:3000  (panel en /admin)
+npm test                    # 20 tests del motor de puntaje
 ```
-
-Con Docker para la base local: `docker compose up -d` levanta PostgreSQL en `localhost:5432`
-(usa el `DATABASE_URL` del `.env.example`).
-
-Panel admin en `/admin`.
 
 ## Variables de entorno
 
 | Variable | Descripción |
 |---|---|
-| `DATABASE_URL` | Cadena de conexión a PostgreSQL. |
-| `ADMIN_EMAIL` | Correo del panel admin. |
-| `ADMIN_PASSWORD` | Contraseña del admin en texto plano (opción recomendada). |
-| `ADMIN_PASSWORD_HASH` | Alternativa: hash bcrypt. Si se define, tiene prioridad. En un `.env` local escapa cada `$` como `\$`. |
-| `SESSION_SECRET` | Secreto (≥32 chars) para firmar la cookie de sesión. |
+| `DATABASE_URL` | Conexión a PostgreSQL. En Railway: `${{ Postgres.DATABASE_URL }}`. |
+| `SESSION_SECRET` | Secreto (≥32 chars) para firmar la cookie de sesión admin. |
+| `ADMIN_EMAIL` + `ADMIN_PASSWORD` | Credencial del admin principal (texto plano). |
+| `ADMIN_PASSWORD_HASH` | Alternativa al anterior: hash bcrypt (tiene prioridad). En un `.env` local escapa cada `$` como `\$`; en Railway va literal. |
+| `ADMIN_ACCOUNTS` | Admins adicionales, JSON: `[{"email":"...","password":"..."}]` (acepta `passwordHash`). |
 
-## Despliegue en Railway
+El respondiente del diagnóstico nunca usa login; estas variables solo protegen `/admin`.
 
-1. **Nuevo proyecto** → *Deploy from GitHub repo* → `rosquillas/auto-mad`.
-2. Agrega el plugin **PostgreSQL** (New → Database → PostgreSQL).
-3. En el servicio de la app, define las variables:
-   - `DATABASE_URL` = `${{ Postgres.DATABASE_URL }}` (referencia al plugin).
-   - `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`.
-4. **No requiere comandos personalizados**: `npm run build` corre `prisma generate && next build`,
-   y `npm start` corre `prisma migrate deploy && next start` (aplica migraciones y arranca).
-5. Railway asigna un dominio público. Los diagnósticos quedan en `/`, el panel en `/admin`.
+## Despliegue (Railway)
 
-> Nota: en Railway las variables se guardan **literales**, por lo que un hash bcrypt con `$`
-> funciona sin escaparse. El escape `\$` solo aplica a archivos `.env` locales.
+El repo está conectado al servicio `web`: **cada `git push` a `main` despliega automáticamente**.
+
+- **Build:** usa el **Dockerfile** (no Nixpacks). Es intencional: la caché de build de Nixpacks/Railpack
+  servía CSS de Tailwind obsoleto; Docker rehace el build de forma determinista ante cualquier cambio.
+- **Arranque:** `npm start` corre `prisma migrate deploy && next start`, así que las migraciones se
+  aplican en cada arranque.
+- **Servicios:** `web` (la app) + plugin **Postgres**. Dominio propio: `fec.fortalecimiento.org`.
+
+Para desplegar en una instancia nueva: crear proyecto en Railway desde el repo, agregar el plugin
+PostgreSQL, definir las variables de entorno de arriba, y conectar un dominio.
