@@ -182,7 +182,7 @@ export const QUESTIONS: Question[] = [
       {
         score: 1,
         level: L1,
-        text: "El sistema contable está integrado a un ERP especializado para el sector social. Publicamos los estados financieros auditados en nuestra página web corporativa y hacemos proyecciones automatizadas de flujo.",
+        text: "El sistema contable está integrado a un ERP o Plataforma Integradora de Administración especializado para el sector social. Publicamos los estados financieros auditados en nuestra página web corporativa y hacemos proyecciones automatizadas de flujo.",
       },
       {
         score: 2,
