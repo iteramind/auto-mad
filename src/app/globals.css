@@ -1,14 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f8fa;
-  --foreground: #1a1a2e;
+  --background: #ffffff;
+  --foreground: #2b2b2b;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+@theme {
+  /* Tipografía institucional CFOSC */
+  --font-sans: var(--font-montserrat), system-ui, -apple-system, sans-serif;
+
+  /* Paleta CFOSC (fortalecimiento.org): morado + amarillo */
+  --color-brand-50: #f5edf7;
+  --color-brand-100: #e8d4ee;
+  --color-brand-200: #d0a9dd;
+  --color-brand-300: #b57ec8;
+  --color-brand-400: #9a54b0;
+  --color-brand-500: #7f3796;
+  --color-brand-600: #6a2978;
+  --color-brand-700: #561f61;
+  --color-brand-800: #43184b;
+  --color-brand-900: #351340;
+
+  --color-accent: #ffe66e;
+  --color-accent-strong: #f4d33a;
+  --color-muted: #686868;
 }
 
 body {

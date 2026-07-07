@@ -59,7 +59,7 @@ export default function EnrollCta({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="w-full rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white transition hover:bg-indigo-700"
+        className="w-full rounded-xl bg-brand-600 px-5 py-3 font-semibold text-white transition hover:bg-brand-700"
       >
         Quiero sumarme a este programa
       </button>
@@ -77,7 +77,7 @@ export default function EnrollCta({
         placeholder="Nombre de contacto"
         value={form.contactName}
         onChange={(e) => setForm({ ...form, contactName: e.target.value })}
-        className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+        className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
       />
       <input
         type="email"
@@ -85,21 +85,21 @@ export default function EnrollCta({
         placeholder="Correo electrónico"
         value={form.contactEmail}
         onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
-        className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+        className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
       />
       <input
         type="tel"
         placeholder="Teléfono (opcional)"
         value={form.contactPhone}
         onChange={(e) => setForm({ ...form, contactPhone: e.target.value })}
-        className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+        className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
       />
       {error && <p className="text-sm text-red-700">{error}</p>}
       <div className="flex gap-3">
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-lg bg-indigo-600 px-5 py-2.5 font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50"
+          className="rounded-lg bg-brand-600 px-5 py-2.5 font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
         >
           {submitting ? "Enviando…" : "Enviar"}
         </button>

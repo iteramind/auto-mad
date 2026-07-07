@@ -124,7 +124,7 @@ export default async function SubmissionsPage({
                 <td className="px-4 py-3 text-right">
                   <Link
                     href={`/admin/submissions/${s.id}`}
-                    className="font-medium text-indigo-600 hover:text-indigo-800"
+                    className="font-medium text-brand-600 hover:text-brand-800"
                   >
                     Ver
                   </Link>
@@ -152,7 +152,7 @@ function FilterLink({
       href={href}
       className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
         active
-          ? "bg-indigo-600 text-white"
+          ? "bg-brand-600 text-white"
           : "bg-white text-gray-600 ring-1 ring-gray-200 hover:bg-gray-50"
       }`}
     >

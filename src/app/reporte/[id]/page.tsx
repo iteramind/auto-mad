@@ -24,7 +24,7 @@ export default async function ReportPage({
     <main className="mx-auto max-w-3xl px-4 py-10 sm:py-14">
       <div className="space-y-8">
         <header className="space-y-1">
-          <p className="text-sm font-semibold uppercase tracking-wide text-indigo-600">
+          <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">
             Reporte de Autodiagnóstico
           </p>
           <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
@@ -95,7 +95,7 @@ export default async function ReportPage({
 
         {/* Programa recomendado + CTA */}
         <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
-          <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">
+          <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">
             Programa recomendado
           </p>
           <h3 className="mt-1 text-xl font-bold text-gray-900">
@@ -116,7 +116,7 @@ export default async function ReportPage({
         <div className="text-center">
           <Link
             href="/"
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-800"
+            className="text-sm font-medium text-brand-600 hover:text-brand-800"
           >
             ← Realizar otro diagnóstico
           </Link>

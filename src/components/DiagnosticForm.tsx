@@ -152,7 +152,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
             <div
-              className="h-full rounded-full bg-indigo-600 transition-all"
+              className="h-full rounded-full bg-brand-600 transition-all"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -161,7 +161,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
 
       {isIntro && (
         <div className="space-y-5">
-          <p className="text-sm font-semibold uppercase tracking-wide text-indigo-600">
+          <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">
             Fortalecimiento Institucional
           </p>
           <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
@@ -180,7 +180,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
           </ul>
           <button
             onClick={() => setStep(1)}
-            className="w-full rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white transition hover:bg-indigo-700 sm:w-auto"
+            className="w-full rounded-xl bg-brand-600 px-5 py-3 font-semibold text-white transition hover:bg-brand-700 sm:w-auto"
           >
             Comenzar diagnóstico
           </button>
@@ -197,7 +197,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
               type="text"
               value={intake.orgName}
               onChange={(e) => setIntake({ ...intake, orgName: e.target.value })}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
               placeholder="Nombre legal o comercial"
             />
           </Field>
@@ -209,7 +209,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
               onChange={(e) =>
                 setIntake({ ...intake, yearsFounded: e.target.value })
               }
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
               placeholder="Ej. 5"
             />
           </Field>
@@ -222,7 +222,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
                   onClick={() => setIntake({ ...intake, hasDonataria: v })}
                   className={`flex-1 rounded-lg border px-4 py-2 font-medium capitalize transition ${
                     intake.hasDonataria === v
-                      ? "border-indigo-600 bg-indigo-50 text-indigo-700"
+                      ? "border-brand-600 bg-brand-50 text-brand-700"
                       : "border-gray-300 text-gray-700 hover:border-gray-400"
                   }`}
                 >
@@ -238,7 +238,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
               onChange={(e) =>
                 setIntake({ ...intake, respondentRole: e.target.value })
               }
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
               placeholder="Ej. Dirección, Coordinación, Administración"
             />
           </Field>
@@ -247,7 +247,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
 
       {currentQuestion && (
         <div className="space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">
+          <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">
             {blockName(currentQuestion.blockId)}
           </p>
           <h2 className="text-lg font-bold text-gray-900">
@@ -266,15 +266,15 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
                   onClick={() => selectOption(currentQuestion.id, opt.score)}
                   className={`w-full rounded-xl border p-4 text-left text-sm transition ${
                     selected
-                      ? "border-indigo-600 bg-indigo-50 ring-1 ring-indigo-200"
-                      : "border-gray-200 hover:border-indigo-300 hover:bg-gray-50"
+                      ? "border-brand-600 bg-brand-50 ring-1 ring-brand-200"
+                      : "border-gray-200 hover:border-brand-300 hover:bg-gray-50"
                   }`}
                 >
                   <span className="flex gap-3">
                     <span
                       className={`mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full border ${
                         selected
-                          ? "border-indigo-600 bg-indigo-600"
+                          ? "border-brand-600 bg-brand-600"
                           : "border-gray-300"
                       }`}
                     >
@@ -309,7 +309,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
           {step < totalSteps ? (
             <button
               onClick={next}
-              className="rounded-lg bg-indigo-600 px-6 py-2.5 font-semibold text-white transition hover:bg-indigo-700"
+              className="rounded-lg bg-brand-600 px-6 py-2.5 font-semibold text-white transition hover:bg-brand-700"
             >
               Continuar
             </button>
@@ -317,7 +317,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
             <button
               onClick={submit}
               disabled={submitting || answeredCount < questions.length}
-              className="rounded-lg bg-indigo-600 px-6 py-2.5 font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50"
+              className="rounded-lg bg-brand-600 px-6 py-2.5 font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
             >
               {submitting ? "Enviando…" : "Ver mi resultado"}
             </button>

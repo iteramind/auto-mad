@@ -29,7 +29,7 @@ export default async function SubmissionDetail({
     <main className="mx-auto max-w-3xl px-4 py-8">
       <Link
         href="/admin/submissions"
-        className="text-sm font-medium text-indigo-600 hover:text-indigo-800"
+        className="text-sm font-medium text-brand-600 hover:text-brand-800"
       >
         ← Volver a diagnósticos
       </Link>
