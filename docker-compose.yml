@@ -1,0 +1,17 @@
+# Solo para desarrollo local: levanta un PostgreSQL.
+# La app se corre con `npm run dev` apuntando a este Postgres.
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: automad
+    ports:
+      - "5432:5432"
+    volumes:
+      - automad_pgdata:/var/lib/postgresql/data
+
+volumes:
+  automad_pgdata:

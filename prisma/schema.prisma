@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Submission {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Intake de la organización
+  orgName        String
+  yearsFounded   Int
+  hasDonataria   Boolean
+  respondentRole String
+
+  // Resultado del diagnóstico
+  answers     Json // { "q1": 1..4, ..., "q10": 1..4 }
+  totalScore  Int // 10..40 (menor = más maduro)
+  level       Int // 1..4 (1 = más maduro)
+  levelName   String
+  blockScores Json // { "b1": { avg, pct }, ... }
+
+  // Inscripción / CTA
+  wantsToEnroll Boolean @default(false)
+  contactName   String?
+  contactEmail  String?
+  contactPhone  String?
+
+  @@index([createdAt])
+  @@index([level])
+}
