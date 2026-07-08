@@ -48,8 +48,8 @@ export default function EnrollCta({
       <div className="rounded-xl bg-green-50 p-5 text-center ring-1 ring-green-200">
         <p className="font-semibold text-green-800">¡Gracias! 🎉</p>
         <p className="mt-1 text-sm text-green-700">
-          Registramos tu interés en el <strong>{program}</strong>. Nos
-          pondremos en contacto contigo pronto.
+          Registramos tu interés en recibir más información sobre el{" "}
+          <strong>{program}</strong>. Nos pondremos en contacto contigo pronto.
         </p>
       </div>
     );
@@ -61,7 +61,7 @@ export default function EnrollCta({
         onClick={() => setOpen(true)}
         className="w-full rounded-xl bg-brand-600 px-5 py-3 font-semibold text-white transition hover:bg-brand-700"
       >
-        Quiero sumarme a este programa
+        Quiero más información sobre este programa
       </button>
     );
   }
@@ -69,7 +69,8 @@ export default function EnrollCta({
   return (
     <form onSubmit={submit} className="space-y-4 rounded-xl bg-gray-50 p-5 ring-1 ring-gray-200">
       <p className="text-sm font-medium text-gray-700">
-        Déjanos tus datos y te contactamos sobre el <strong>{program}</strong>.
+        Déjanos tus datos y te enviamos más información sobre el{" "}
+        <strong>{program}</strong>.
       </p>
       <input
         type="text"

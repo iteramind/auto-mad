@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { computeResult, type Answers } from "@/lib/scoring";
+import { computeResult, LEVELS, type Answers } from "@/lib/scoring";
 import RadarChartClient from "@/components/RadarChartClient";
 import EnrollCta from "@/components/EnrollCta";
 
@@ -93,21 +93,67 @@ export default async function ReportPage({
           </div>
         </section>
 
-        {/* Programa recomendado + CTA */}
-        <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
-          <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">
-            Programa recomendado
-          </p>
-          <h3 className="mt-1 text-xl font-bold text-gray-900">
-            {result.program}
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-gray-600">
-            {result.programDescription}
-          </p>
-          <div className="mt-5">
+        {/* Programas de acompañamiento */}
+        <section className="space-y-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">
+              Programas de acompañamiento
+            </p>
+            <h3 className="mt-1 text-xl font-bold text-gray-900">
+              Conoce todas las alternativas
+            </h3>
+            <p className="mt-1 text-sm text-gray-600">
+              Estos son los programas disponibles. Destacamos el recomendado para
+              tu organización según tu nivel de madurez.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {LEVELS.map((lvl) => {
+              const recommended = lvl.level === result.level;
+              return (
+                <div
+                  key={lvl.level}
+                  className={`rounded-2xl bg-white p-6 shadow-sm ${
+                    recommended ? "ring-2" : "ring-1 ring-gray-200"
+                  }`}
+                  style={
+                    recommended
+                      ? { ["--tw-ring-color" as string]: lvl.color }
+                      : undefined
+                  }
+                >
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span
+                      className="inline-block h-2.5 w-2.5 flex-none rounded-full"
+                      style={{ backgroundColor: lvl.color }}
+                      aria-hidden
+                    />
+                    <h4 className="text-lg font-bold text-gray-900">
+                      {lvl.program}
+                    </h4>
+                    {recommended && (
+                      <span
+                        className="rounded-full px-3 py-1 text-xs font-semibold text-white"
+                        style={{ backgroundColor: lvl.color }}
+                      >
+                        Recomendado para ti
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                    {lvl.programDescription}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* CTA de más información */}
+          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
             <EnrollCta
               submissionId={submission.id}
-              program={result.program}
+              program="Programa de Acompañamiento personalizado para OSC"
               alreadyEnrolled={submission.wantsToEnroll}
             />
           </div>
