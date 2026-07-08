@@ -49,6 +49,20 @@ export default function RootLayout({
 
         {/* Pie institucional */}
         <footer className="mt-12 border-t border-gray-100 bg-white">
+          {/* Franja: financiado por la FEC */}
+          <div className="bg-brand-700">
+            <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-6 text-center">
+              <p className="text-xs font-semibold uppercase tracking-wide text-white/70">
+                Con el financiamiento de
+              </p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/fec-logo-blanco.png"
+                alt="Fundación del Empresariado Coahuilense AC"
+                className="h-12 w-auto sm:h-14"
+              />
+            </div>
+          </div>
           <div className="mx-auto max-w-6xl px-4 py-6 text-center text-sm text-gray-500">
             <p className="font-semibold text-brand-700">
               Centro para el Fortalecimiento de la Sociedad Civil
