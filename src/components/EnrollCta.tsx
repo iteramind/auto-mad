@@ -48,8 +48,9 @@ export default function EnrollCta({
       <div className="rounded-xl bg-green-50 p-5 text-center ring-1 ring-green-200">
         <p className="font-semibold text-green-800">¡Gracias! 🎉</p>
         <p className="mt-1 text-sm text-green-700">
-          Registramos tu interés en recibir más información sobre el{" "}
-          <strong>{program}</strong>. Nos pondremos en contacto contigo pronto.
+          La Fundación del Empresariado Coahuilense estará comunicándose para
+          brindar información sobre las convocatorias y becas que hemos preparado
+          para ustedes. Espera nuestra comunicación a partir del 16 de julio.
         </p>
       </div>
     );
