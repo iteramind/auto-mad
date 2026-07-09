@@ -71,6 +71,12 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
     const years = Number(intake.yearsFounded);
     if (intake.yearsFounded === "" || Number.isNaN(years) || years < 0)
       return err("Ingresa un número válido de años de constitución.");
+    if (!Number.isInteger(years))
+      return err("Los años de constitución deben ser un número entero.");
+    if (years > 300)
+      return err(
+        "Ingresa la antigüedad en años (no el año de fundación). Por ejemplo, 5.",
+      );
     if (intake.hasDonataria === "")
       return err("Indica si cuenta con donataria autorizada.");
     if (!intake.respondentRole.trim())
@@ -127,7 +133,15 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error ?? "No se pudo enviar el diagnóstico.");
+        const fieldErrors: string[] = Object.values(
+          data.issues?.fieldErrors ?? {},
+        )
+          .flat()
+          .filter((m): m is string => typeof m === "string");
+        const detail = fieldErrors.length ? ` ${fieldErrors.join(" ")}` : "";
+        throw new Error(
+          (data.error ?? "No se pudo enviar el diagnóstico.") + detail,
+        );
       }
       const { id } = await res.json();
       router.push(`/reporte/${id}`);
@@ -201,16 +215,18 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
               placeholder="Nombre legal o comercial"
             />
           </Field>
-          <Field label="Años de constitución">
+          <Field label="Antigüedad de la organización (años desde su constitución)">
             <input
               type="number"
               min={0}
+              max={300}
+              step={1}
               value={intake.yearsFounded}
               onChange={(e) =>
                 setIntake({ ...intake, yearsFounded: e.target.value })
               }
               className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
-              placeholder="Ej. 5"
+              placeholder="Ej. 5 (no el año de fundación)"
             />
           </Field>
           <Field label="¿Cuenta con donataria autorizada?">
