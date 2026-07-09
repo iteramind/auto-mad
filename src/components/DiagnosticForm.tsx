@@ -10,10 +10,13 @@ interface Props {
 }
 
 interface Intake {
+  contactName: string;
+  respondentRole: string;
+  contactEmail: string;
+  contactPhone: string;
   orgName: string;
   yearsFounded: string;
   hasDonataria: "" | "si" | "no";
-  respondentRole: string;
 }
 
 // Barajado determinista (estable entre servidor y cliente) para no presentar
@@ -39,10 +42,13 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
 
   const [step, setStep] = useState(0); // 0 = intro
   const [intake, setIntake] = useState<Intake>({
+    contactName: "",
+    respondentRole: "",
+    contactEmail: "",
+    contactPhone: "",
     orgName: "",
     yearsFounded: "",
     hasDonataria: "",
-    respondentRole: "",
   });
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [error, setError] = useState<string | null>(null);
@@ -67,6 +73,16 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
     step === 0 ? 0 : Math.round(((step - 1) / totalSteps) * 100);
 
   function validateIntake(): boolean {
+    // Datos de contacto
+    if (!intake.contactName.trim())
+      return err("Ingresa el nombre de contacto.");
+    if (!intake.respondentRole.trim())
+      return err("Ingresa el puesto de quien contesta.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(intake.contactEmail.trim()))
+      return err("Ingresa un correo electrónico válido.");
+    if (!intake.contactPhone.trim())
+      return err("Ingresa un teléfono de contacto.");
+    // Datos de la organización
     if (!intake.orgName.trim()) return err("Ingresa el nombre de la organización.");
     const years = Number(intake.yearsFounded);
     if (intake.yearsFounded === "" || Number.isNaN(years) || years < 0)
@@ -79,8 +95,6 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
       );
     if (intake.hasDonataria === "")
       return err("Indica si cuenta con donataria autorizada.");
-    if (!intake.respondentRole.trim())
-      return err("Ingresa el puesto de quien contesta.");
     setError(null);
     return true;
   }
@@ -128,6 +142,9 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
           yearsFounded: Number(intake.yearsFounded),
           hasDonataria: intake.hasDonataria === "si",
           respondentRole: intake.respondentRole.trim(),
+          contactName: intake.contactName.trim(),
+          contactEmail: intake.contactEmail.trim(),
+          contactPhone: intake.contactPhone.trim(),
           answers,
         }),
       });
@@ -161,7 +178,7 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
       {!isIntro && (
         <div className="mb-6">
           <div className="mb-2 flex items-center justify-between text-xs font-medium text-gray-500">
-            <span>{isIntake ? "Datos de la organización" : `Pregunta ${questionIndex + 1} de ${questions.length}`}</span>
+            <span>{isIntake ? "Datos de contacto y organización" : `Pregunta ${questionIndex + 1} de ${questions.length}`}</span>
             <span>{progressPct}%</span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
@@ -202,62 +219,111 @@ export default function DiagnosticForm({ blocks, questions }: Props) {
       )}
 
       {isIntake && (
-        <div className="space-y-5">
-          <h2 className="text-xl font-bold text-gray-900">
-            Datos de la organización
-          </h2>
-          <Field label="Nombre de la organización">
-            <input
-              type="text"
-              value={intake.orgName}
-              onChange={(e) => setIntake({ ...intake, orgName: e.target.value })}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
-              placeholder="Nombre legal o comercial"
-            />
-          </Field>
-          <Field label="Antigüedad de la organización (años desde su constitución)">
-            <input
-              type="number"
-              min={0}
-              max={300}
-              step={1}
-              value={intake.yearsFounded}
-              onChange={(e) =>
-                setIntake({ ...intake, yearsFounded: e.target.value })
-              }
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
-              placeholder="Ej. 5 (no el año de fundación)"
-            />
-          </Field>
-          <Field label="¿Cuenta con donataria autorizada?">
-            <div className="flex gap-3">
-              {(["si", "no"] as const).map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  onClick={() => setIntake({ ...intake, hasDonataria: v })}
-                  className={`flex-1 rounded-lg border px-4 py-2 font-medium capitalize transition ${
-                    intake.hasDonataria === v
-                      ? "border-brand-600 bg-brand-50 text-brand-700"
-                      : "border-gray-300 text-gray-700 hover:border-gray-400"
-                  }`}
-                >
-                  {v === "si" ? "Sí" : "No"}
-                </button>
-              ))}
+        <div className="space-y-8">
+          <div className="space-y-5">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">
+                Datos de contacto
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                Con estos datos la Fundación del Empresariado Coahuilense podrá
+                compartirte las convocatorias y becas disponibles.
+              </p>
             </div>
-          </Field>
-          <Field label="Puesto de quien contesta">
-            <input
-              type="text"
-              value={intake.respondentRole}
-              onChange={(e) =>
-                setIntake({ ...intake, respondentRole: e.target.value })
-              }
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
-              placeholder="Ej. Dirección, Coordinación, Administración"
-            />
-          </Field>
+            <Field label="Nombre de contacto">
+              <input
+                type="text"
+                value={intake.contactName}
+                onChange={(e) =>
+                  setIntake({ ...intake, contactName: e.target.value })
+                }
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                placeholder="Nombre de quien contesta"
+              />
+            </Field>
+            <Field label="Puesto de quien contesta">
+              <input
+                type="text"
+                value={intake.respondentRole}
+                onChange={(e) =>
+                  setIntake({ ...intake, respondentRole: e.target.value })
+                }
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                placeholder="Ej. Dirección, Coordinación, Administración"
+              />
+            </Field>
+            <Field label="Correo electrónico">
+              <input
+                type="email"
+                value={intake.contactEmail}
+                onChange={(e) =>
+                  setIntake({ ...intake, contactEmail: e.target.value })
+                }
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                placeholder="nombre@organizacion.org"
+              />
+            </Field>
+            <Field label="Teléfono">
+              <input
+                type="tel"
+                value={intake.contactPhone}
+                onChange={(e) =>
+                  setIntake({ ...intake, contactPhone: e.target.value })
+                }
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                placeholder="Ej. 844 123 4567"
+              />
+            </Field>
+          </div>
+
+          <div className="space-y-5">
+            <h2 className="text-xl font-bold text-gray-900">
+              Datos de la organización
+            </h2>
+            <Field label="Nombre de la organización">
+              <input
+                type="text"
+                value={intake.orgName}
+                onChange={(e) =>
+                  setIntake({ ...intake, orgName: e.target.value })
+                }
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                placeholder="Nombre legal o comercial"
+              />
+            </Field>
+            <Field label="Antigüedad de la organización (años desde su constitución)">
+              <input
+                type="number"
+                min={0}
+                max={300}
+                step={1}
+                value={intake.yearsFounded}
+                onChange={(e) =>
+                  setIntake({ ...intake, yearsFounded: e.target.value })
+                }
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                placeholder="Ej. 5 (no el año de fundación)"
+              />
+            </Field>
+            <Field label="¿Cuenta con donataria autorizada?">
+              <div className="flex gap-3">
+                {(["si", "no"] as const).map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    onClick={() => setIntake({ ...intake, hasDonataria: v })}
+                    className={`flex-1 rounded-lg border px-4 py-2 font-medium capitalize transition ${
+                      intake.hasDonataria === v
+                        ? "border-brand-600 bg-brand-50 text-brand-700"
+                        : "border-gray-300 text-gray-700 hover:border-gray-400"
+                    }`}
+                  >
+                    {v === "si" ? "Sí" : "No"}
+                  </button>
+                ))}
+              </div>
+            </Field>
+          </div>
         </div>
       )}
 

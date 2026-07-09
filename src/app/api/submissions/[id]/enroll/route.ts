@@ -1,27 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { enrollSchema } from "@/lib/validation";
 
+// Los datos de contacto se capturan al inicio del diagnóstico, así que este
+// endpoint solo marca el interés del usuario en el programa recomendado.
 export async function POST(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "JSON inválido." }, { status: 400 });
-  }
-
-  const parsed = enrollSchema.safeParse(body);
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "Datos inválidos.", issues: parsed.error.flatten() },
-      { status: 400 },
-    );
-  }
 
   const existing = await prisma.submission.findUnique({
     where: { id },
@@ -36,12 +22,7 @@ export async function POST(
 
   await prisma.submission.update({
     where: { id },
-    data: {
-      wantsToEnroll: true,
-      contactName: parsed.data.contactName,
-      contactEmail: parsed.data.contactEmail,
-      contactPhone: parsed.data.contactPhone || null,
-    },
+    data: { wantsToEnroll: true },
   });
 
   return NextResponse.json({ ok: true });

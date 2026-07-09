@@ -26,15 +26,10 @@ export const submissionSchema = z.object({
     .trim()
     .min(1, "El puesto de quien contesta es obligatorio.")
     .max(200),
+  contactName: z.string().trim().min(1, "El nombre de contacto es obligatorio.").max(200),
+  contactEmail: z.string().trim().email("Correo electrónico inválido.").max(200),
+  contactPhone: z.string().trim().min(1, "El teléfono es obligatorio.").max(50),
   answers: answersSchema,
 });
 
 export type SubmissionInput = z.infer<typeof submissionSchema>;
-
-export const enrollSchema = z.object({
-  contactName: z.string().trim().min(1, "El nombre de contacto es obligatorio.").max(200),
-  contactEmail: z.string().trim().email("Correo electrónico inválido.").max(200),
-  contactPhone: z.string().trim().max(50).optional().or(z.literal("")),
-});
-
-export type EnrollInput = z.infer<typeof enrollSchema>;
